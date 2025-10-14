@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import useTheme from "../../hooks/useTheme";
+import TempSwitch from "../../componants/shared/Switch";
 
 export default function SettingScreen() {
   const { theme } = useTheme();
@@ -11,7 +12,9 @@ export default function SettingScreen() {
           backgroundColor: theme.background,
         },
       ]}
-    ></View>
+    >
+      <TempSwitch />
+    </View>
   );
 }
 

@@ -4,10 +4,12 @@ import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { ThemeProvider } from "../context/ThemeContext";
+import useTheme from "../hooks/useTheme";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function LayoutContent() {
+  const { mode } = useTheme();
   const [loaded, error] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
@@ -27,7 +29,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
+    <>
       <Stack>
         <Stack.Screen
           name="(tabs)"
@@ -36,7 +38,15 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar style={mode === "dark" ? "light" : "dark"} />
+    </>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <LayoutContent />
     </ThemeProvider>
   );
 }

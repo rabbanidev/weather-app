@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
-import { Colors, ThemeType } from "../constants/theme";
+import { Colors } from "../constants/theme";
 import { Appearance } from "react-native";
+import { ThemeType } from "../types";
 
 type DefaultTheme = {
   theme: typeof Colors.light;
@@ -10,7 +11,7 @@ type DefaultTheme = {
 
 export const ThemeContext = createContext<DefaultTheme>({
   theme: Colors.light,
-  mode: "light",
+  mode: "dark",
   toggleTheme: () => {},
 });
 

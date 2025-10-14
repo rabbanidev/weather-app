@@ -16,5 +16,3 @@ export const Colors = {
     light: "#0095ff",
   },
 };
-
-export type ThemeType = keyof typeof Colors;

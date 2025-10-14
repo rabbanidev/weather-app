@@ -2,9 +2,21 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import useTheme from "../../hooks/useTheme";
 import Card from "../shared/Card";
 import AppText from "../shared/AppText";
+import { NominatimData, WeatherData } from "../../types";
+import { getDayName } from "../../utils/getDay";
+import { getWeatherTitleIcon } from "../../utils/getWeatherTitleIcon";
 
-export default function WeatherHeader() {
+type WeatherHeaderProps = {
+  weatherData: WeatherData;
+  nominatimData: NominatimData;
+};
+
+export default function WeatherHeader({
+  weatherData,
+  nominatimData,
+}: WeatherHeaderProps) {
   const { theme } = useTheme();
+  const { icon } = getWeatherTitleIcon(weatherData.current.weathercode);
 
   return (
     <Card>
@@ -19,7 +31,7 @@ export default function WeatherHeader() {
                 },
               ]}
             >
-              23
+              {weatherData?.current?.temperature_2m}
             </Text>
             <Text
               style={[
@@ -29,25 +41,19 @@ export default function WeatherHeader() {
                 },
               ]}
             >
-              °C
+              {weatherData?.current_units?.temperature_2m}
             </Text>
           </View>
-          <AppText value="Friday" type="secondary" />
+          <AppText value={`${getDayName(new Date())}day`} type="secondary" />
           <AppText
-            value="Dhaka, BD"
+            value={`${nominatimData.address?.county}, ${nominatimData.address.country}`}
             type="secondary"
             style={styles.locationText}
           />
         </View>
 
         <View>
-          <Image
-            source={{
-              uri: "https://openweathermap.org/img/wn/02d@2x.png",
-            }}
-            width={150}
-            height={150}
-          />
+          <Text style={{ fontSize: 100 }}>{icon}</Text>
         </View>
       </View>
     </Card>
