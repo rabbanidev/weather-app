@@ -1,81 +1,78 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import useTheme from "../../hooks/useTheme";
 
-interface TempSwitchProps {
-  onChange: (unit: "C" | "F") => void;
-  initialUnit?: "C" | "F";
-}
-
-const TempSwitch: React.FC<TempSwitchProps> = ({
-  onChange,
-  initialUnit = "C",
-}) => {
-  const [unit, setUnit] = useState<"C" | "F">(initialUnit);
-
-  const handlePress = (selectedUnit: "C" | "F") => {
-    setUnit(selectedUnit);
-    onChange(selectedUnit);
-  };
-
-  return (
-    <View style={styles.container}>
-      <Pressable
-        style={[
-          styles.option,
-          unit === "C" ? styles.activeOption : {},
-          { borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
-        ]}
-        onPress={() => handlePress("C")}
-      >
-        <Text style={[styles.text, unit === "C" ? styles.activeText : {}]}>
-          °C
-        </Text>
-      </Pressable>
-
-      <Pressable
-        style={[
-          styles.option,
-          unit === "F" ? styles.activeOption : {},
-          { borderTopRightRadius: 20, borderBottomRightRadius: 20 },
-        ]}
-        onPress={() => handlePress("F")}
-      >
-        <Text style={[styles.text, unit === "F" ? styles.activeText : {}]}>
-          °F
-        </Text>
-      </Pressable>
-    </View>
-  );
+type SwitchProps = {
+  options: string[];
+  selectedValue: string;
+  onPress: (option: string) => void;
 };
 
-export default TempSwitch;
+export default function Switch({
+  options,
+  selectedValue,
+  onPress,
+}: SwitchProps) {
+  const { theme } = useTheme();
+
+  const buttonWidth = 100 / options.length;
+
+  return (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.background,
+        },
+      ]}
+    >
+      {options.map((option) => {
+        const isActive = option === selectedValue;
+        return (
+          <Pressable
+            key={option}
+            style={[
+              styles.button,
+              {
+                backgroundColor: isActive ? theme.card : "transparent",
+                width: `${buttonWidth}%`,
+              },
+            ]}
+            onPress={() => onPress(option)}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  color: theme.secondary,
+                },
+              ]}
+            >
+              {option}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
+    padding: 5,
+    borderRadius: 6,
     flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 20,
-    overflow: "hidden",
-    width: 120,
-    height: 40,
-  },
-  option: {
-    flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
   },
-  activeOption: {
-    backgroundColor: "#4a90e2",
+  button: {
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
   },
-  text: {
+  buttonText: {
     fontSize: 16,
-    color: "#555",
-    fontWeight: "500",
-  },
-  activeText: {
-    color: "#fff",
-    fontWeight: "700",
+    fontFamily: "Roboto-Medium",
+    letterSpacing: 1,
+    textTransform: "capitalize",
   },
 });

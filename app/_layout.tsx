@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { ThemeProvider } from "../context/ThemeContext";
 import useTheme from "../hooks/useTheme";
+import { SettingProvider } from "../context/SettingContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +30,7 @@ function LayoutContent() {
   }
 
   return (
-    <>
+    <SettingProvider>
       <Stack>
         <Stack.Screen
           name="(tabs)"
@@ -39,7 +40,7 @@ function LayoutContent() {
         />
       </Stack>
       <StatusBar style={mode === "dark" ? "light" : "dark"} />
-    </>
+    </SettingProvider>
   );
 }
 

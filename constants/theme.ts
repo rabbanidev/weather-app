@@ -1,3 +1,7 @@
+import { ThemeType } from "../types";
+
+export const themeModes: ThemeType[] = ["light", "dark"];
+
 export const Colors = {
   light: {
     background: "#d3d8ddff",

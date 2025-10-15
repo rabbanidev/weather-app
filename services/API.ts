@@ -5,7 +5,7 @@ import {
   PRESSURE_UNIT,
   PreviousWeatherData,
   TEMPERATURE_UNIT,
-  UNID_SPEED_UNIT,
+  WIND_SPEED_UNIT,
   WeatherData,
 } from "../types";
 
@@ -14,7 +14,7 @@ const BASE_URL = "https://api.open-meteo.com/v1/forecast";
 type FetchParams = {
   location: ILocation;
   temperature_unit?: TEMPERATURE_UNIT;
-  wind_speed_unit?: UNID_SPEED_UNIT;
+  wind_speed_unit?: WIND_SPEED_UNIT;
   precipitation_unit?: PRECIPITATION_UNIT;
   pressure_unit?: PRESSURE_UNIT;
 };

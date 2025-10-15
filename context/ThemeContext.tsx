@@ -16,7 +16,7 @@ export const ThemeContext = createContext<DefaultTheme>({
 });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [mode, setMode] = useState<ThemeType>("light");
+  const [mode, setMode] = useState<ThemeType>("dark");
 
   // Auto-update when system theme changes
   useEffect(() => {

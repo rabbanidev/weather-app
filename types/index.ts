@@ -8,7 +8,7 @@ export type ILocation = {
 };
 
 export type TEMPERATURE_UNIT = "celsius" | "fahrenheit";
-export type UNID_SPEED_UNIT = "kmh" | "ms" | "mph" | "kn";
+export type WIND_SPEED_UNIT = "kmh" | "ms" | "mph" | "kn";
 export type PRECIPITATION_UNIT = "mm" | "inch";
 export type PRESSURE_UNIT = "hPa" | "mmHg" | "inchHg";
 
