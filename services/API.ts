@@ -13,18 +13,18 @@ const BASE_URL = "https://api.open-meteo.com/v1/forecast";
 
 type FetchParams = {
   location: ILocation;
-  temperature_unit?: TEMPERATURE_UNIT;
-  wind_speed_unit?: WIND_SPEED_UNIT;
-  precipitation_unit?: PRECIPITATION_UNIT;
-  pressure_unit?: PRESSURE_UNIT;
+  temperature_unit: TEMPERATURE_UNIT;
+  wind_speed_unit: WIND_SPEED_UNIT;
+  precipitation_unit: PRECIPITATION_UNIT;
+  pressure_unit: PRESSURE_UNIT;
 };
 
 export const fetchCurrentWeather = async ({
   location,
-  temperature_unit = "celsius",
-  wind_speed_unit = "kmh",
-  precipitation_unit = "mm",
-  pressure_unit = "hPa",
+  temperature_unit,
+  wind_speed_unit,
+  precipitation_unit,
+  pressure_unit,
 }: FetchParams): Promise<[WeatherData, NominatimData]> => {
   return Promise.all([
     fetch(
@@ -48,10 +48,10 @@ export const fetchPreviousWeather = async ({
   location,
   startDate,
   endDate,
-  temperature_unit = "celsius",
-  wind_speed_unit = "kmh",
-  precipitation_unit = "mm",
-  pressure_unit = "hPa",
+  temperature_unit,
+  wind_speed_unit,
+  precipitation_unit,
+  pressure_unit,
 }: {
   startDate: string;
   endDate: string;

@@ -9,9 +9,26 @@ import {
   tempatureUnits,
   windSpeedUnits,
 } from "../../constants/units";
+import useSetting from "../../hooks/useSetting";
+import {
+  PRECIPITATION_UNIT,
+  PRESSURE_UNIT,
+  TEMPERATURE_UNIT,
+  WIND_SPEED_UNIT,
+} from "../../types";
 
 export default function Units() {
   const { theme } = useTheme();
+  const {
+    tempatureUnit,
+    pressureUnit,
+    precipitationUnit,
+    windSpeed,
+    updateTempatureUnit,
+    updatePrecipitationUnit,
+    updatePressureUnit,
+    updateWindSpeedUpdate,
+  } = useSetting();
 
   return (
     <View style={styles.container}>
@@ -35,10 +52,10 @@ export default function Units() {
           />
           <Switch
             options={tempatureUnits}
-            selectedValue={"celsius"}
-            onPress={(option) => {
-              console.log(option);
-            }}
+            selectedValue={tempatureUnit}
+            onPress={(option) =>
+              updateTempatureUnit(option as TEMPERATURE_UNIT)
+            }
           />
         </View>
         {/* Wind speed unit */}
@@ -50,10 +67,10 @@ export default function Units() {
           />
           <Switch
             options={windSpeedUnits}
-            selectedValue="mph"
-            onPress={(option) => {
-              console.log(option);
-            }}
+            selectedValue={windSpeed}
+            onPress={(option) =>
+              updateWindSpeedUpdate(option as WIND_SPEED_UNIT)
+            }
           />
         </View>
         {/* Precipitation unit */}
@@ -65,10 +82,10 @@ export default function Units() {
           />
           <Switch
             options={precipitationUnits}
-            selectedValue="mm"
-            onPress={(option) => {
-              console.log(option);
-            }}
+            selectedValue={precipitationUnit}
+            onPress={(option) =>
+              updatePrecipitationUnit(option as PRECIPITATION_UNIT)
+            }
           />
         </View>
         {/* Pressure unit */}
@@ -80,10 +97,8 @@ export default function Units() {
           />
           <Switch
             options={pressureUnits}
-            selectedValue="mmHg"
-            onPress={(option) => {
-              console.log(option);
-            }}
+            selectedValue={pressureUnit}
+            onPress={(option) => updatePressureUnit(option as PRESSURE_UNIT)}
           />
         </View>
       </Card>

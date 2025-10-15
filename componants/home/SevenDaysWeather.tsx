@@ -1,6 +1,4 @@
 import {
-  ScrollView,
-  Image,
   StyleSheet,
   Text,
   View,
@@ -16,6 +14,7 @@ import { fetchPreviousWeather } from "../../services/API";
 import Error from "../shared/Error";
 import { getDayName } from "../../utils/getDay";
 import { getWeatherTitleIcon } from "../../utils/getWeatherTitleIcon";
+import useSetting from "../../hooks/useSetting";
 
 type SevenDaysWeatherProps = {
   location: ILocation;
@@ -33,6 +32,8 @@ const endDate = end.toISOString().split("T")[0];
 
 export default function SevenDaysWeather({ location }: SevenDaysWeatherProps) {
   const { theme } = useTheme();
+  const { tempatureUnit, pressureUnit, precipitationUnit, windSpeed } =
+    useSetting();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [result, setResult] = useState<PreviousWeatherData | null>(null);
@@ -47,6 +48,10 @@ export default function SevenDaysWeather({ location }: SevenDaysWeatherProps) {
             location,
             startDate,
             endDate,
+            wind_speed_unit: windSpeed,
+            temperature_unit: tempatureUnit,
+            pressure_unit: pressureUnit,
+            precipitation_unit: precipitationUnit,
           });
           setResult(res);
         } catch (error: any) {
@@ -57,7 +62,15 @@ export default function SevenDaysWeather({ location }: SevenDaysWeatherProps) {
       };
       fetchResult();
     }
-  }, [location]);
+  }, [
+    location,
+    startDate,
+    endDate,
+    tempatureUnit,
+    pressureUnit,
+    windSpeed,
+    precipitationUnit,
+  ]);
 
   if (isLoading) {
     return <ActivityIndicator size="small" color={theme.light} />;

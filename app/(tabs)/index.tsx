@@ -15,9 +15,12 @@ import useCurrentLocation from "../../hooks/useCurrentLocation";
 import { useCallback, useEffect, useState } from "react";
 import { fetchCurrentWeather } from "../../services/API";
 import { ILocation, NominatimData, WeatherData } from "../../types";
+import useSetting from "../../hooks/useSetting";
 
 export default function HomeScreen() {
   const { theme } = useTheme();
+  const { tempatureUnit, pressureUnit, precipitationUnit, windSpeed } =
+    useSetting();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const {
     isLoading: currentLocationIsLoading,
@@ -47,6 +50,10 @@ export default function HomeScreen() {
 
           const res = await fetchCurrentWeather({
             location: currentLocation,
+            wind_speed_unit: windSpeed,
+            temperature_unit: tempatureUnit,
+            pressure_unit: pressureUnit,
+            precipitation_unit: precipitationUnit,
           });
 
           setWeatherResult(res[0]);
@@ -59,7 +66,13 @@ export default function HomeScreen() {
       };
       fetchResult();
     }
-  }, [currentLocation]);
+  }, [
+    currentLocation,
+    tempatureUnit,
+    pressureUnit,
+    windSpeed,
+    precipitationUnit,
+  ]);
 
   if (currentLocationIsLoading || isLoading) {
     return (
