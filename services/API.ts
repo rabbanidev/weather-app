@@ -1,4 +1,5 @@
 import {
+  GeocodingResponse,
   ILocation,
   NominatimData,
   PRECIPITATION_UNIT,
@@ -9,7 +10,9 @@ import {
   WeatherData,
 } from "../types";
 
-const BASE_URL = "https://api.open-meteo.com/v1/forecast";
+const METEO_BASE_URL = "https://api.open-meteo.com/v1/forecast";
+const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
+const GEOCODDING_BASE_URL = "https://geocoding-api.open-meteo.com";
 
 type FetchParams = {
   location: ILocation;
@@ -28,11 +31,11 @@ export const fetchCurrentWeather = async ({
 }: FetchParams): Promise<[WeatherData, NominatimData]> => {
   return Promise.all([
     fetch(
-      `${BASE_URL}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,weathercode,relative_humidity_2m,apparent_temperature,pressure_msl,wind_speed_10m,uv_index,visibility&hourly=temperature_2m,weathercode&timezone=auto&forecast_days=1&temperature_unit=${temperature_unit}&wind_speed_unit=${wind_speed_unit}&precipitation_unit=${precipitation_unit}&pressure_unit=${pressure_unit}`
+      `${METEO_BASE_URL}?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,weathercode,relative_humidity_2m,apparent_temperature,pressure_msl,wind_speed_10m,uv_index,visibility&hourly=temperature_2m,weathercode&timezone=auto&forecast_days=1&temperature_unit=${temperature_unit}&wind_speed_unit=${wind_speed_unit}&precipitation_unit=${precipitation_unit}&pressure_unit=${pressure_unit}`
     ).then((res) => res.json()),
 
     fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`,
+      `${NOMINATIM_BASE_URL}/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`,
       {
         headers: {
           "User-Agent": "ReactNativeApp/1.0",
@@ -57,8 +60,17 @@ export const fetchPreviousWeather = async ({
   endDate: string;
 } & FetchParams): Promise<PreviousWeatherData> => {
   const res = await fetch(
-    `${BASE_URL}?latitude=${location.latitude}&longitude=${location.longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_sum,wind_speed_10m_max&timezone=auto&temperature_unit=${temperature_unit}&wind_speed_unit=${wind_speed_unit}&precipitation_unit=${precipitation_unit}&pressure_unit=${pressure_unit}`
+    `${METEO_BASE_URL}?latitude=${location.latitude}&longitude=${location.longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_sum,wind_speed_10m_max&timezone=auto&temperature_unit=${temperature_unit}&wind_speed_unit=${wind_speed_unit}&precipitation_unit=${precipitation_unit}&pressure_unit=${pressure_unit}`
   );
 
+  return res.json();
+};
+
+export const fetchCities = async (
+  searchValue: string
+): Promise<GeocodingResponse> => {
+  const res = await fetch(
+    `${GEOCODDING_BASE_URL}/v1/search?name=${searchValue}`
+  );
   return res.json();
 };

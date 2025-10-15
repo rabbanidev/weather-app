@@ -33,7 +33,13 @@ export default function TabLayout() {
           title: "Home",
         }}
       />
-      <Tabs.Screen name="setting" />
+      <Tabs.Screen
+        name="Cities"
+        options={{
+          title: "My City",
+        }}
+      />
+      <Tabs.Screen name="Setting" />
     </Tabs>
   );
 }

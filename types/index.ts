@@ -119,3 +119,14 @@ export type DailyData = {
   weathercode: number[];
   wind_speed_10m_max: number[];
 };
+
+export type City = {
+  name: string;
+  latitude: number;
+  longitude: number;
+  country_code: string;
+  country: string;
+};
+export type GeocodingResponse = {
+  results: City[];
+};

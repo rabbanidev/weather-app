@@ -127,11 +127,11 @@ export default function SevenDaysWeather({ location }: SevenDaysWeatherProps) {
                   type="secondary"
                   style={styles.maxTemp}
                 />
-                <AppText
+                {/* <AppText
                   value={`/ ${item.minTemp}°`}
                   type="secondary"
                   style={styles.minTemp}
-                />
+                /> */}
               </View>
             </View>
           )}

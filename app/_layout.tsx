@@ -10,7 +10,7 @@ import { SettingProvider } from "../context/SettingContext";
 SplashScreen.preventAutoHideAsync();
 
 function LayoutContent() {
-  const { mode } = useTheme();
+  const { mode, theme } = useTheme();
   const [loaded, error] = useFonts({
     "Roboto-Light": require("../assets/fonts/Roboto-Light.ttf"),
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
@@ -39,7 +39,11 @@ function LayoutContent() {
           }}
         />
       </Stack>
-      <StatusBar style={mode === "dark" ? "light" : "dark"} />
+
+      <StatusBar
+        style={mode === "dark" ? "light" : "dark"}
+        backgroundColor={theme.background}
+      />
     </SettingProvider>
   );
 }

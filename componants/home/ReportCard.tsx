@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import Card from "../shared/Card";
 import AppText from "../shared/AppText";
@@ -9,6 +9,9 @@ type ReportCardProps = {
   title: string;
   value: string | number;
 };
+
+const screenWidth = Dimensions.get("window").width;
+const cardWidth = (screenWidth - 55) / 2;
 
 export default function ReportCard({ icon, title, value }: ReportCardProps) {
   const { theme } = useTheme();
@@ -26,8 +29,7 @@ export default function ReportCard({ icon, title, value }: ReportCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    flexBasis: "48%",
-    width: "auto",
+    width: cardWidth,
   },
   cardHeader: {
     flexDirection: "row",

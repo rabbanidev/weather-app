@@ -45,11 +45,19 @@ export default function WeatherHeader({
             </Text>
           </View>
           <AppText value={`${getDayName(new Date())}day`} type="secondary" />
-          <AppText
-            value={`${nominatimData.address?.county}, ${nominatimData.address.country}`}
-            type="secondary"
-            style={styles.locationText}
-          />
+          {nominatimData.address?.county ? (
+            <AppText
+              value={`${nominatimData.address?.county}, ${nominatimData.address.country}`}
+              type="secondary"
+              style={styles.locationText}
+            />
+          ) : (
+            <AppText
+              value={nominatimData.address.country}
+              type="secondary"
+              style={styles.locationText}
+            />
+          )}
         </View>
 
         <View>

@@ -36,6 +36,8 @@ export default function HomeScreen() {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    setErrorMessage("");
+
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);

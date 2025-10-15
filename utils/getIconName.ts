@@ -7,9 +7,10 @@ export const getIconName = (
   switch (name) {
     case "index":
       return focused ? "home" : "home-outline";
-
-    case "setting":
+    case "Setting":
       return focused ? "settings" : "settings-outline";
+    case "Cities":
+      return focused ? "list" : "list-outline";
     default:
       return focused ? "home" : "home-outline";
   }

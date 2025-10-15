@@ -10,6 +10,7 @@ export const Colors = {
     primary: "#0b131e",
     secondary: "#495a63ff",
     light: "#0095ff",
+    placeHolder: "#777",
   },
   dark: {
     background: "#0b131e",
@@ -18,5 +19,6 @@ export const Colors = {
     primary: "#f0f1f1",
     secondary: "#aab7c5ff",
     light: "#0095ff",
+    placeHolder: "#aaa",
   },
 };

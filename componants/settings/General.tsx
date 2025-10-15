@@ -35,20 +35,20 @@ export default function General() {
           />
         </View>
         {/* AM/PM */}
-        <View style={styles.cardContent}>
+        {/* <View style={styles.cardContent}>
           <AppText
             value="Theme"
             type="secondary"
             style={styles.cardContentTitle}
           />
-          {/* <Switch
+          <Switch
             options={["AM", "PM"]}
             selectedValue={"AM"}
             onPress={(option) => {
               console.log(option);
             }}
-          /> */}
-        </View>
+          />
+        </View> */}
       </Card>
     </View>
   );
