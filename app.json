@@ -8,28 +8,51 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "scheme": "weatherapp",
-
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow WeatherApp to access your location while using the app to show accurate weather.",
+        "NSLocationAlwaysUsageDescription": "Allow WeatherApp to always access your location for continuous weather updates.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow WeatherApp to access your location to provide accurate weather anytime."
+      }
     },
-
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "INTERNET"
+      ],
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.rabbani17.weatherapp",
+      "versionCode": 1
     },
-
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4097f7c6-a384-4fea-bbc7-972f095c0cab"
+      }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Weather App to use your location to show accurate forecasts.",
+          "locationAlwaysPermission": "Allow Weather App to always access your location for continuous weather updates.",
+          "locationWhenInUsePermission": "Allow Weather App to use your location while you are using the app."
+        }
+      ]
+    ]
   }
 }

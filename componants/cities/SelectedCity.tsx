@@ -6,11 +6,13 @@ import useTheme from "../../hooks/useTheme";
 import { City } from "../../types";
 
 type SelectedCityProps = {
-  city: City;
+  city?: City | null;
 };
 
 export default function SelectedCity({ city }: SelectedCityProps) {
   const { theme } = useTheme();
+
+  if (!city) return;
 
   return (
     <View style={styles.container}>

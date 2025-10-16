@@ -34,91 +34,103 @@ export default function HomeScreen() {
     null
   );
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setErrorMessage("");
+  const loadWeatherData = useCallback(async () => {
+    if (!currentLocation) return;
 
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
+    try {
+      setErrorMessage("");
+      setIsLoading(true);
 
-  useEffect(() => {
-    if (currentLocation) {
-      const fetchResult = async () => {
-        try {
-          setErrorMessage("");
-          setIsLoading(true);
+      const res = await fetchCurrentWeather({
+        location: currentLocation,
+        wind_speed_unit: windSpeed,
+        temperature_unit: tempatureUnit,
+        pressure_unit: pressureUnit,
+        precipitation_unit: precipitationUnit,
+      });
 
-          const res = await fetchCurrentWeather({
-            location: currentLocation,
-            wind_speed_unit: windSpeed,
-            temperature_unit: tempatureUnit,
-            pressure_unit: pressureUnit,
-            precipitation_unit: precipitationUnit,
-          });
-
-          setWeatherResult(res[0]);
-          setNominatimResult(res[1]);
-        } catch (error: any) {
-          setErrorMessage(error?.message || "Something went wrong");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchResult();
+      setWeatherResult(res[0]);
+      setNominatimResult(res[1]);
+    } catch (error: any) {
+      setErrorMessage(error?.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   }, [
     currentLocation,
+    windSpeed,
     tempatureUnit,
     pressureUnit,
-    windSpeed,
     precipitationUnit,
   ]);
 
+  useEffect(() => {
+    loadWeatherData();
+  }, [loadWeatherData]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadWeatherData();
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  }, [loadWeatherData]);
+
+  let content;
   if (currentLocationIsLoading || isLoading) {
-    return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme.background,
-          },
-        ]}
-      >
-        <ActivityIndicator size="large" color={theme.light} />
-      </SafeAreaView>
+    content = <ActivityIndicator size="large" color={theme.light} />;
+  } else if (!isLoading && (currentLocationErrorMessage || errorMessage)) {
+    content = (
+      <Error errorMessage={currentLocationErrorMessage || errorMessage} />
     );
-  } else if (currentLocationErrorMessage || errorMessage) {
-    return <Error errorMessage={currentLocationErrorMessage} />;
+  } else if (
+    !isLoading &&
+    !currentLocationErrorMessage &&
+    !errorMessage &&
+    !weatherResult &&
+    !nominatimResult
+  ) {
+    content = (
+      <Error errorMessage="Weather data not fetched please reload app." />
+    );
+  } else if (
+    !isLoading &&
+    !currentLocationErrorMessage &&
+    !errorMessage &&
+    weatherResult &&
+    nominatimResult
+  ) {
+    content = (
+      <>
+        <WeatherHeader
+          weatherData={weatherResult}
+          nominatimData={nominatimResult}
+        />
+        <WeatherReport weatherData={weatherResult} />
+        <TodayWeather weatherData={weatherResult} />
+        <SevenDaysWeather location={currentLocation as ILocation} />
+      </>
+    );
   }
 
   return (
-    weatherResult &&
-    nominatimResult && (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme.background,
-          },
-        ]}
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.background,
+        },
+      ]}
+    >
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          <WeatherHeader
-            weatherData={weatherResult}
-            nominatimData={nominatimResult}
-          />
-          <WeatherReport weatherData={weatherResult} />
-          <TodayWeather weatherData={weatherResult} />
-          <SevenDaysWeather location={currentLocation as ILocation} />
-        </ScrollView>
-      </SafeAreaView>
-    )
+        {content}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

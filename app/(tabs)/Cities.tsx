@@ -33,7 +33,7 @@ export default function CitiesScreen() {
 
   const onSelectedCity = (city: City) => {
     setCurrentCity({ ...currentCity, ...city });
-    setSearchValue((prev) => "");
+    setSearchValue("");
   };
 
   const onRefresh = useCallback(() => {
@@ -47,7 +47,7 @@ export default function CitiesScreen() {
 
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, 500);
   }, []);
 
   useEffect(() => {
@@ -80,10 +80,26 @@ export default function CitiesScreen() {
     }
   }, [currentCity, tempatureUnit, pressureUnit, windSpeed, precipitationUnit]);
 
+  let content;
   if (isLoading) {
-    return <ActivityIndicator size="large" color={theme.light} />;
+    content = <ActivityIndicator size="large" color={theme.light} />;
   } else if (!isLoading && errorMessage) {
-    return <Error errorMessage={errorMessage} />;
+    content = <Error errorMessage={errorMessage} />;
+  } else if (!isLoading && !errorMessage && currentCity) {
+    content = (
+      <>
+        <SelectedCity city={currentCity} />
+        {weatherResult && nominatimResult && (
+          <>
+            <WeatherHeader
+              weatherData={weatherResult}
+              nominatimData={nominatimResult}
+            />
+            <WeatherReport weatherData={weatherResult} />
+          </>
+        )}
+      </>
+    );
   }
 
   return (
@@ -100,20 +116,9 @@ export default function CitiesScreen() {
     >
       <View style={styles.container}>
         <Searchbar defaultValue={searchValue} onSearch={setSearchValue} />
-        {searchValue && (
-          <Cities searchValue={searchValue} onSelectedCity={onSelectedCity} />
-        )}
-        {currentCity && <SelectedCity city={currentCity} />}
+        <Cities searchValue={searchValue} onSelectedCity={onSelectedCity} />
 
-        {weatherResult && nominatimResult && (
-          <>
-            <WeatherHeader
-              weatherData={weatherResult}
-              nominatimData={nominatimResult}
-            />
-            <WeatherReport weatherData={weatherResult} />
-          </>
-        )}
+        {content}
       </View>
     </ScrollView>
   );

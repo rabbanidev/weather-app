@@ -3,7 +3,6 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import { City } from "../../types";
@@ -11,11 +10,10 @@ import AppText from "../shared/AppText";
 import { useEffect, useState } from "react";
 import { fetchCities } from "../../services/API";
 import useTheme from "../../hooks/useTheme";
-import Card from "../shared/Card";
 import Error from "../shared/Error";
 
 type CitiesProps = {
-  searchValue: string;
+  searchValue?: string;
   onSelectedCity: (city: City) => void;
 };
 
@@ -26,12 +24,16 @@ export default function Cities({ searchValue, onSelectedCity }: CitiesProps) {
   const [cities, setCities] = useState<City[]>([]);
 
   useEffect(() => {
-    if (searchValue.trim()) {
+    if (searchValue?.trim()) {
       const startFetch = async () => {
         try {
           setIsLoading(true);
           const response = await fetchCities(searchValue);
-          setCities(response.results);
+          if (response.results && response.results.length > 0) {
+            setCities(response.results);
+          } else {
+            setCities([]);
+          }
         } catch (error: any) {
           setErrorMessage(error?.message || "Something went wrong");
         } finally {
@@ -43,51 +45,52 @@ export default function Cities({ searchValue, onSelectedCity }: CitiesProps) {
     }
   }, [searchValue]);
 
+  if (!searchValue?.trim()) return;
+
   if (isLoading) {
     return <ActivityIndicator size="large" color={theme.light} />;
   } else if (!isLoading && errorMessage) {
     return <Error errorMessage={errorMessage} />;
+  } else if (cities.length === 0) {
+    return <Error errorMessage="Search result empty" />;
   }
 
   return (
-    cities.length > 0 && (
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme.card,
-          },
-        ]}
-      >
-        <AppText value="City List (Select city)" type="title" />
-        <FlatList
-          contentContainerStyle={styles.cityList}
-          data={cities}
-          scrollEnabled={false}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => onSelectedCity(item)}>
-              <Card
-                style={[
-                  styles.city,
-                  {
-                    backgroundColor: theme.background,
-                  },
-                ]}
-              >
-                <AppText
-                  value={`${item.name} (${item.country})`}
-                  type="secondary"
-                  style={{
-                    fontSize: 14,
-                  }}
-                />
-              </Card>
-            </Pressable>
-          )}
-        />
-      </View>
-    )
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.card,
+        },
+      ]}
+    >
+      <AppText value="City List (Select city)" type="title" />
+      <FlatList
+        contentContainerStyle={styles.cityList}
+        data={cities}
+        scrollEnabled={false}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => onSelectedCity(item)}
+            style={[
+              styles.city,
+              {
+                backgroundColor: theme.background,
+              },
+            ]}
+          >
+            <AppText
+              value={`${item.name} (${item.country})`}
+              type="secondary"
+              style={{
+                fontSize: 14,
+              }}
+            />
+          </Pressable>
+        )}
+      />
+    </View>
   );
 }
 
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     rowGap: 10,
   },
   city: {
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 5,
   },
